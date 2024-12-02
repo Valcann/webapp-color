@@ -1,0 +1,43 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: frontend-app-gateway
+  namespace: my-app
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - hosts:
+        - myapp.sevira.cloud
+      port:
+        name: http
+        number: 80
+        protocol: HTTP
+      tls:
+        httpsRedirect: true
+    - hosts:
+        - myapp.sevira.cloud
+      port:
+        name: https-workloads
+        number: 443
+        protocol: HTTP
+      tls:
+        mode: PASSTHROUGH
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: frontend-app
+  namespace: my-app
+spec:
+  gateways:
+    - frontend-app-gateway
+  hosts:
+    - myapp.sevira.cloud
+  http:
+    - route:
+        - destination:
+            host: frontend-app.my-app.svc.cluster.local
+            port:
+              number: 8080
+          weight: 100
