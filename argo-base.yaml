@@ -45,7 +45,7 @@ spec:
   source:
     repoURL: https://github.com/Valcann/webapp-color.git
     targetRevision: HEAD
-    path: /kubernetes
+    path: kubernetes
   destination:
     server: https://kubernetes.default.svc
   syncPolicy:
